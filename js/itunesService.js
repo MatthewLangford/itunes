@@ -1,4 +1,4 @@
-angular.module('itunes').service('itunesService', function($http, $q){
+angular.module('itunes').service('itunesService', function($http){
   //This service is what will do the 'heavy lifting' and get our data from the iTunes API.
   //Also note that we're using a 'service' and not a 'factory' so all your methods you want to call in your controller need to be on 'this'.
 
@@ -8,19 +8,22 @@ angular.module('itunes').service('itunesService', function($http, $q){
   //You can return the http request or you can make your own promise in order to manipulate the data before you resolve it.
     var sortedData = [];
     //Code here
+
+
     this.requestArtist = function (artistName) {
         return $http({
-            method: 'GET',
-            url: 'https://itunes.apple.com/search?term=' + artistName + '&callback=JSON_CALLBACK'
+            url: 'https://itunes.apple.com/search?term=' + artistName,
+            method: 'GET'
         }).then(function (response) {
-            for(var i = 0; i < response.length; i++){
-                    sortedData.push({AlbumArt: response.data[i]['artworkUrl130'],
-                    Artist: response.data[i]['artistName'],
-                    Song: response.data[i]['trackName'],
-                    Collection: response.data[i]['collectionName'],
-                    CollectionPrice: response.data[i]['collectionPrice'],
-                    Play: response.data[i]['previewUrl'],
-                    Type: response.data[i]['kind']
+            var data = response.data.results;
+            for(var i = 0; i < data.length; i++){
+                    sortedData.push({AlbumArt: data[i].artworkUrl60,
+                    Artist: data[i].artistName,
+                    Song: data[i].trackName,
+                    Collection: data[i].collectionName,
+                    CollectionPrice: data[i].collectionPrice,
+                    Play: data[i].previewUrl,
+                    Type: data[i].kind
                 })
             }
             return sortedData;

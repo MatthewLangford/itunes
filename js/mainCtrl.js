@@ -27,7 +27,7 @@ angular.module('itunes').controller('mainCtrl', function($scope, itunesService){
     
     //Code here
   $scope.getSongData = function (artist) {
-      return itunesService.requestArtist(artist).then(function (response) {
+       itunesService.requestArtist(artist).then(function (response) {
           $scope.songData = response;
           console.log(response);
       });
