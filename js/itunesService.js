@@ -6,9 +6,28 @@ angular.module('itunes').service('itunesService', function($http, $q){
   //https://itunes.apple.com/search?term=' + artist + '&callback=JSON_CALLBACK'
   //Note that in the above line, artist is the parameter being passed in. 
   //You can return the http request or you can make your own promise in order to manipulate the data before you resolve it.
-
+    var sortedData = [];
     //Code here
-    
+    this.requestArtist = function (artistName) {
+        return $http({
+            method: 'GET',
+            url: 'https://itunes.apple.com/search?term=' + artistName + '&callback=JSON_CALLBACK'
+        }).then(function (response) {
+            for(var i = 0; i < response.length; i++){
+                    sortedData.push({AlbumArt: response.data[i]['artworkUrl130'],
+                    Artist: response.data[i]['artistName'],
+                    Song: response.data[i]['trackName'],
+                    Collection: response.data[i]['collectionName'],
+                    CollectionPrice: response.data[i]['collectionPrice'],
+                    Play: response.data[i]['previewUrl'],
+                    Type: response.data[i]['kind']
+                })
+            }
+            return sortedData;
+        });
+    };
+
+
 
 
 
